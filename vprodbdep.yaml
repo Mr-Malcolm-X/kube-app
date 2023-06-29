@@ -21,8 +21,8 @@ metadata:
             - name: vprodb-port
               containerPort: 3306
             volumeMounts:
-              - name: vpro-db-data
-                mountPath: /vprodb
+              - mountPath: /var/lib/mysql
+                name: vpro-db-data
             env:
               - name: MYSQL_ROOT_PASSWORD
                 valueFrom:

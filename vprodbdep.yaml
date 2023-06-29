@@ -4,39 +4,39 @@ metadata:
   name: vprodb
   labels:
     app: vprodb
-  spec:
-    selector:
-      matchLabels:
+spec:
+  selector:
+    matchLabels:
+      app: vprodb
+  replicas: 1
+  template:
+    metadata:
+      labels:
         app: vprodb
-    replicas: 1
-    template:
-      metadata:
-        labels:
-          app: vprodb
-      spec:
-        containers:
-          - name: vprodb
-            image: vprofile/vprofiledb:V1
-            args:
-              - "ignore-db-dir=lost+found"
-            ports:
-            - name: vprodb-port
-              containerPort: 3306
-            volumeMounts:
-              - mountPath: /var/lib/mysql
-                name: vpro-db-data
-            env:
-              - name: MYSQL_ROOT_PASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    name: app-secret
-                    key: db-pass
-        nodeSelector:
-          zone: us-east-2a
-        volumes:
-          - name: vpro-db-data
-            hostPath:
-              path: /data
-              type: DirectoryOrCreate
+    spec:
+      containers:
+        - name: vprodb
+          image: vprofile/vprofiledb:V1
+          args:
+            - "ignore-db-dir=lost+found"
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: vpro-db-data
+          ports:
+          - name: vprodb-port
+            containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                 secretKeyRef:
+                   name: app-secret
+                   key: db-pass
+      nodeSelector:
+        zone: us-east-2a
+      volumes:
+        - name: vpro-db-data
+          hostPath:
+             path: /data
+             type: DirectoryOrCreate
 
 
